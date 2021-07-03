@@ -54,7 +54,8 @@
         "post-install-cmd": [
             "php artisan clear-compiled",
             "chmod -R 777 public/",
-            "cp .env.example .env"
+            "cp .env.example .env",
+            "touch database/database.sqlite"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

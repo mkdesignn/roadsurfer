@@ -1,0 +1,44 @@
+.remove-padding{
+    padding:0px;
+}
+
+.day{
+    width: 14.28%;
+    display:inline-block;
+    border-right: 1px solid rgba(42,42,42,.1);
+    text-align: right;
+    padding: 10px;
+    float: left;
+    border-bottom: 1px solid rgba(42,42,42,.2);
+    overflow: auto;
+    height:100px;
+}
+
+.disabled{
+    color:#ababab;
+}
+
+.day-header{
+    width: 14%;
+    display:inline-block;
+    padding:5px;
+}
+
+.timeline-border{
+    border-bottom: 1px solid rgba(42,42,42,.2);
+}
+
+.item{
+    font-size:9px;
+    text-align: left;
+}
+
+.weekend{
+    background-color:#eaeaea;
+}
+
+.booked-badge{
+    margin-top:4px;
+    float: right;
+    color:#fff;
+}

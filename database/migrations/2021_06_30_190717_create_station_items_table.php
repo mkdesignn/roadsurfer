@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStationEquipmentsTable extends Migration
+class CreateStationItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateStationEquipmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('station_equipments', function (Blueprint $table) {
+        Schema::create('station_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('station_id');
-            $table->unsignedInteger('equipment_id');
+            $table->unsignedInteger('item_id');
             $table->unsignedInteger('amount');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateStationEquipmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('station_equipments');
+        Schema::dropIfExists('station_items');
     }
 }

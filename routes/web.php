@@ -14,3 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/timeline', 'TimelineController@index');
+Route::get('/', function(){
+    return view('index');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

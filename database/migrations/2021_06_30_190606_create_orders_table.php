@@ -18,8 +18,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('order_id');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->unsignedInteger('pickup_station');
-            $table->unsignedInteger('drop_off_station');
+            $table->unsignedInteger('pickup_station_id');
+            $table->unsignedInteger('drop_off_station_id');
             $table->timestamps();
         });
     }

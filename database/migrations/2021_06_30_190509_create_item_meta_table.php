@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCampervansTable extends Migration
+class CreateItemMetaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateCampervansTable extends Migration
      */
     public function up()
     {
-        Schema::create('campervans', function (Blueprint $table) {
+        Schema::create('item_meta', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('item_id');
             $table->integer('make');
             $table->integer('model');
             $table->integer('color');
@@ -30,6 +31,6 @@ class CreateCampervansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campervans');
+        Schema::dropIfExists('item_meta');
     }
 }

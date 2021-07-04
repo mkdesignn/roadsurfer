@@ -6,6 +6,6 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Order::class, function (Faker $faker) {
     return [
-        'order_id' => $faker->numerify("*********"),
+        'order_id' => $faker->numerify("########"),
     ];
 });

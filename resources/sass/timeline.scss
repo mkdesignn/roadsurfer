@@ -1,3 +1,8 @@
+
+.today-title{
+    float: left;
+}
+
 .remove-padding{
     padding:0px;
 }
@@ -41,4 +46,44 @@
     margin-top:4px;
     float: right;
     color:#fff;
+}
+
+.carousel-control-wrapper{
+    float:right;
+    position: relative;
+    width:50px;
+    height:30px;
+}
+
+.station_wrapper{
+    float:left;
+    margin-left:15px;
+}
+
+.carousel-control-next-icon{
+    filter: invert(100%);
+    cursor: pointer;
+}
+
+.carousel-control-next{
+    right:0px;
+    cursor: pointer;
+}
+
+.carousel-control-prev-icon{
+    filter: invert(100%);
+    cursor: pointer;
+}
+
+.carousel-control-prev{
+    left:auto;
+    right:30px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.nice-select{
+    font-size:11px !important;
+    height: 30px;
+    line-height: 30px;
 }

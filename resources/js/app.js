@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+require('jquery-nice-select');
 
 window.Vue = require('vue');
 
@@ -30,3 +31,30 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
+
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
+$(document).ready(function() {
+    $('.station-select').niceSelect();
+    $('.station-select').on('change', (e)=>{
+        window.location.href = updateQueryStringParameter(window.location.href, 'station', $('.station-select').val())
+    })
+});
+
+function updateQueryStringParameter(uri, key, value) {
+    var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    } else {
+        var hash =  '';
+        if( uri.indexOf('#') !== -1 ){
+            hash = uri.replace(/.*#/, '#');
+            uri = uri.replace(/#.*/, '');
+        }
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        return uri + separator + key + "=" + value + hash;
+    }
+}

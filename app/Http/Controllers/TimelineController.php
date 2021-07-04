@@ -16,10 +16,7 @@ class TimelineController extends Controller
      * @var Order
      */
     private $order;
-    /**
-     * @var Request
-     */
-    private $request;
+
     /**
      * @var Station
      */
@@ -28,46 +25,47 @@ class TimelineController extends Controller
     /**
      * TimelineController constructor.
      * @param Order $order
-     * @param Request $request
      * @param Station $station
      */
-    public function __construct(Order $order, Request $request, Station $station)
+    public function __construct(Order $order, Station $station)
     {
         $this->order = $order;
-        $this->request = $request;
         $this->station = $station;
+        $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $month = $this->request->has('month') ? $this->request->month : 0;
-        $station = $this->request->has('station') ?
-            $this->station->where('name', $this->request->station)->first() :
+        $month = $request->has('month') ? $request->month : now()->month;
+        $station = $request->has('station') ?
+            $this->station->where('id', $request->station)->first() :
             $this->station->default()->first();
 
         $timeline = [];
 
-        $this->order
+         $this->order
             ->selectOneMonth($month)
             ->wherePickupStation($station)
             ->orderBy('start_date')
             ->chunk(50, function($orders) use(&$timeline, &$station){
                 $orders->each(function ($order) use (&$station, &$timeline) {
                     $bookedDays = Carbon::parse($order->start_date)->diffInDays($order->end_date);
+
                     $order->orderItems->each(function ($orderItem) use (&$bookedDays, &$order, &$station, &$timeline) {
 
-                        $totalItems = $station->items()->where('items.id', $orderItem->item_id)->first()->pivot->amount;
                         for ($day = 0; $day < $bookedDays; $day++) {
                             $dayDate = Carbon::parse($order->start_date)->addDays($day)->toDateString();
+
+                            $totalItems = $station->totalItems($orderItem->item_id, $dayDate);
 
                             if(Carbon::parse($dayDate)->isNextMonth()){
                                 continue;
                             }
 
-                            $dateFoundInTimeline = array_search($dayDate, array_column($timeline, 'date'));
+                            $dateFoundInTimeline = findValueInArray($dayDate, $timeline, 'date');
                             if($dateFoundInTimeline !== false){
                                 $items = $timeline[$dateFoundInTimeline]['items'];
-                                $itemFoundInItems = array_search($orderItem->item_id, array_column($items, 'item_id'));
+                                $itemFoundInItems = findValueInArray($orderItem->item_id, $items, 'item_id');
                                 if($itemFoundInItems !== false){
                                     $booked = $timeline[$dateFoundInTimeline]['items'][$itemFoundInItems]['booked'] += $orderItem->quantity;
                                     $timeline[$dateFoundInTimeline]['items'][$itemFoundInItems]['available'] = $totalItems - $booked;
@@ -88,8 +86,9 @@ class TimelineController extends Controller
             });
 
         $timeline = $this->addMissingDays($timeline, $month);
+        $stations = Station::pluck('name', 'id');
 
-        return view('timeline', compact('timeline'));
+        return view('timeline', compact('timeline', 'month', 'station', 'stations'));
     }
 
     private function buildItem(OrderItem $orderItem, int $totalItems): array
@@ -104,8 +103,8 @@ class TimelineController extends Controller
 
     private function addMissingDays(array $timeline, int $month): array
     {
-        $startDate = now()->addMonths($month)->startOfMonth()->toDateString();
-        $diffInDays = now()->addMonths($month)->endOfMonth()->diffInDays($startDate);
+        $startDate = now()->month($month)->startOfMonth()->toDateString();
+        $diffInDays = now()->month($month)->endOfMonth()->diffInDays($startDate);
         for($i = 0; $i <= $diffInDays; $i++){
             $dayDate = Carbon::parse($startDate)->addDays($i)->toDateString();
             $dateFound = array_search($dayDate, array_column($timeline, 'date'));

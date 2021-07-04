@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\TimelineService;
+use App\Services\TimelineServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->instance(TimelineServiceInterface::class, $this->app->make(TimelineService::class));
     }
 }

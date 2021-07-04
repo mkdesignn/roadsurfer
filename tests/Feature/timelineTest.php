@@ -19,6 +19,8 @@ class timelineTest extends TestCase
 
     protected $secondItem;
 
+    protected $pickupStation;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -26,6 +28,7 @@ class timelineTest extends TestCase
 
         $this->firstItem = factory(Item::class)->create(['type'=>'equipment']);
         $this->secondItem = factory(Item::class)->create(['type'=>'equipment']);
+        $this->pickupStation = factory(Station::class)->create(['default'=>1]);
     }
 
     /**
@@ -64,14 +67,14 @@ class timelineTest extends TestCase
     public function testTimelineReturnsTotalNumberOfOneItemThatHasBookedForToday()
     {
         // Create fake data
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>3]);
+
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>3]);
         $dropOffStation = factory(Station::class)->create();
 
         $order = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDay()->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
             ]);
 
@@ -106,15 +109,15 @@ class timelineTest extends TestCase
      */
     public function testTimelineReturnsTotalNumberOfItemsThatHasBookedForToday()
     {
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>3]);
-        $pickupStation->items()->save($this->secondItem, ['amount'=>5]);
+
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>3]);
+        $this->pickupStation->items()->save($this->secondItem, ['amount'=>5]);
         $dropOffStation = factory(Station::class)->create();
 
         $order = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDay()->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -158,15 +161,14 @@ class timelineTest extends TestCase
     public function testTimelineReturnsTotalNumberOfItemsThatHasBookedOnDifferentOrders()
     {
         // Create fake data
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>3]);
-        $pickupStation->items()->save($this->secondItem, ['amount'=>5]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>3]);
+        $this->pickupStation->items()->save($this->secondItem, ['amount'=>5]);
         $dropOffStation = factory(Station::class)->create();
 
         $firstOrder = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDay()->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -180,7 +182,7 @@ class timelineTest extends TestCase
         $secondOrder = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDay()->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -219,15 +221,14 @@ class timelineTest extends TestCase
         $this->withoutExceptionHandling();
         // Create fake data
         $this->secondItem = factory(Item::class)->create(['type'=>'equipment']);
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>3]);
-        $pickupStation->items()->save($this->secondItem, ['amount'=>5]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>3]);
+        $this->pickupStation->items()->save($this->secondItem, ['amount'=>5]);
         $dropOffStation = factory(Station::class)->create();
 
         $firstOrder = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDay()->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -241,7 +242,7 @@ class timelineTest extends TestCase
         $secondOrder = factory(Order::class)->create([
             'start_date'=>now()->addDays(2)->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDays(3)->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -289,14 +290,13 @@ class timelineTest extends TestCase
     {
 
         // Create fake data
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>8]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>8]);
         $dropOffStation = factory(Station::class)->create();
 
         $firstOrder = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDays(3)->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -310,7 +310,7 @@ class timelineTest extends TestCase
         $secondOrder = factory(Order::class)->create([
             'start_date'=>now()->addDays(1)->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDays(3)->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -361,14 +361,13 @@ class timelineTest extends TestCase
     {
         $this->withoutExceptionHandling();
         // Create fake data
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>8]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>8]);
         $dropOffStation = factory(Station::class)->create();
 
         $firstOrder = factory(Order::class)->create([
             'start_date'=>now()->startOfDay()->toDateTimeString(),
             'end_date'=>now()->addDays(1)->startOfDay()->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -405,8 +404,7 @@ class timelineTest extends TestCase
     public function testTimelineShouldNotReturnsNextMonthTimeline()
     {
         // Create fake data
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>40]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>40]);
         $dropOffStation = factory(Station::class)->create();
 
         $startOfMonth = now()->toDateTimeString();
@@ -414,7 +412,7 @@ class timelineTest extends TestCase
         $firstOrder = factory(Order::class)->create([
             'start_date'=>$startOfMonth,
             'end_date'=>$endOfMonth,
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 
@@ -459,6 +457,25 @@ class timelineTest extends TestCase
     /**
      * @see TimelineController::index()
      */
+    public function testTimelineApiShouldReturnJsonResponse()
+    {
+
+        // Build the expectation
+        for($i = now()->startOfMonth()->day; $i <= now()->endOfMonth()->day; $i ++){
+            $timeline[] = [
+                'date'=>now()->day($i)->toDateString(),
+                'items'=>[],
+            ];
+        }
+
+        // call timeline route
+        $this->get('/timeline', ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJson(['data'=>$timeline]);
+    }
+
+    /**
+     * @see TimelineController::index()
+     */
     public function testTimelineReturnsMonthAsCurrentMonth()
     {
         // call timeline route
@@ -480,10 +497,8 @@ class timelineTest extends TestCase
     public function testTimelineReturnsDefaultStation()
     {
 
-        $station = factory(Station::class)->create(['default'=>1]);
-
         // call timeline route
-        $this->get('/timeline')->assertViewHas('station', $station);
+        $this->get('/timeline')->assertViewHas('station', $this->pickupStation);
     }
 
     /**
@@ -494,7 +509,6 @@ class timelineTest extends TestCase
         $this->withoutExceptionHandling();
 
         $station = factory(Station::class)->create();
-        $defaultStation = factory(Station::class)->create(['default'=>1]);
 
         // call timeline route
         $this->get('/timeline?station='.$station->id)->assertViewHas('station', $station);
@@ -504,8 +518,7 @@ class timelineTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $pickupStation = factory(Station::class)->create(['default'=>1]);
-        $pickupStation->items()->save($this->firstItem, ['amount'=>40]);
+        $this->pickupStation->items()->save($this->firstItem, ['amount'=>40]);
 
         $dropOffStation = factory(Station::class)->create(['default'=>1]);
         $dropOffStation->items()->save($this->firstItem, ['amount'=>1]);
@@ -513,7 +526,7 @@ class timelineTest extends TestCase
         $firstOrder = factory(Order::class)->create([
             'start_date'=>now()->toDateTimeString(),
             'end_date'=>now()->addDays(1)->toDateTimeString(),
-            'pickup_station_id'=>$pickupStation->id,
+            'pickup_station_id'=>$this->pickupStation->id,
             'drop_off_station_id'=>$dropOffStation->id
         ]);
 

@@ -14,12 +14,17 @@ Note: You should have sqlite3 driver on your machine if you are willing to use s
 Before running the migrations you'll need to copy .env.example to .env, Feel free to change the .env file config.
 
 
-To run the migration and the database, You can use
+To run the migration, You can use
 ```
 php artisan migrate
 ```
 
-To run the server you can run it by writing the following npm command
+To generate fakeData you can use,
+```
+php artisan db:seed
+```
+
+To run the server you can run it by writing the following command
 ```
 php artisan serve
 ```

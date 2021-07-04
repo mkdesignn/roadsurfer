@@ -4,4 +4,4 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/timeline', 'TimelineController@index');
+Route::get('/timeline', 'Api\TimelineController@index');

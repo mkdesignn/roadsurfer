@@ -1,0 +1,36 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "L5 OpenApi",
+        "description": "L5 Swagger OpenApi description",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/timeline": {
+            "get": {
+                "description": "Home page",
+                "operationId": "ba03c6dc5768116f6396e42c70cf2336",
+                "parameters": [
+                    {
+                        "name": "month",
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "name": "station",
+                        "in": "query",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Return the timeline for one month"
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

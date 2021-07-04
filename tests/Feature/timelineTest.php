@@ -469,7 +469,7 @@ class timelineTest extends TestCase
         }
 
         // call timeline route
-        $this->get('/timeline', ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
+        $this->get('api/timeline', ['HTTP_X-Requested-With' => 'XMLHttpRequest'])
             ->assertJson(['data'=>$timeline]);
     }
 
@@ -506,12 +506,62 @@ class timelineTest extends TestCase
      */
     public function testTimelineReturnsStationAsRequestedStation()
     {
-        $this->withoutExceptionHandling();
-
         $station = factory(Station::class)->create();
 
         // call timeline route
         $this->get('/timeline?station='.$station->id)->assertViewHas('station', $station);
+    }
+
+    /**
+     * @see TimelineController::index()
+     */
+    public function testTimelineThrowValidationErrorIfMonthWasLargerThan12()
+    {
+        $station = factory(Station::class)->create();
+
+        // call timeline route
+        $this->get('/timeline?month=13')->assertStatus(302)->assertSessionHasErrors();
+        $errors = session('errors');
+        $this->assertNotNull($errors->get('month'));
+    }
+
+    /**
+     * @see TimelineController::index()
+     */
+    public function testTimelineThrowValidationErrorIfMonthWasLessThanOne()
+    {
+        $station = factory(Station::class)->create();
+
+        // call timeline route
+        $this->get('/timeline?month=0')->assertStatus(302)->assertSessionHasErrors();
+        $errors = session('errors');
+        $this->assertNotNull($errors->get('month'));
+    }
+
+    /**
+     * @see TimelineController::index()
+     */
+    public function testTimelineThrowValidationErrorIfMonthWasString()
+    {
+        $station = factory(Station::class)->create();
+
+        // call timeline route
+        $this->get('/timeline?month=test')->assertStatus(302)->assertSessionHasErrors();
+        $errors = session('errors');
+        $this->assertNotNull($errors->get('month'));
+    }
+
+    /**
+     * @see TimelineController::index()
+     */
+    public function testTimelineThrowValidationErrorIfStationDidnotExists()
+    {
+        $station = factory(Station::class)->create();
+
+        // call timeline route
+        $this->get('/timeline?station=test')->assertStatus(302)->assertSessionHasErrors();
+        $errors = session('errors');
+        $this->assertNotNull($errors->get('station'));
     }
 
     public function testTimelineAvailableShouldDeductedIfThePickupStationWasNotAsDropOffStation()

@@ -33,12 +33,15 @@ This way you'll have the server running. The server is running on port 8000 whic
 
 Feel free to change the ports as the way you like.
 
-You can get the timeline for current month by calling the following api.
+You can access the timeline by logging into the app and visit this url
 ```
-POST /api/timeline HTTP/1.1
-Host: {{host}}
-Content-Type: application/json
+GET /timeline HTTP/1.1
 ```
+There is also a route defined for api, You can access it by visiting
+```
+GET api/timeline HTTP/1.1
+```
+There is also swagger documentation, In case you want to see the api.
 
 You can also run the tests by using
 ```
@@ -50,3 +53,5 @@ To see the results in action, you can visit https://roadsurfer.mohammadkaab.com/
 You can use the following username and password to login
 U: roadsurfer@gmail.com
 P: secret 
+
+`I have not defined any api middleware, Since I did not see the requirment in the task.`
